@@ -1,19 +1,41 @@
-# Hexadeca Pi cluster running Kubernete
+# Hexadeca Pi cluster running Kubernetes
 
-Kubernetes cluster using 16 Raspberry Pi 3B+ plus one as master.
+Kubernetes cluster using 16 Raspberry Pi 3B+ plus one as master. Trying to make it as seamless as possible while learning Ansible for automation.
+
 End goal is to drive wife nuts with idiot project.
 
 **Specs**
 
 - 64 cores (22.4Ghz combined)
-- 1TB of total storage (each node are equipped with a 64GB uSD)
+- 1TB of total storage (each node is equipped with a 64GB uSD)
 
-Usage:
-```git clone git@github.com:m600x/hexadeca.git
-cd hexadeca/ansible
-ansible-playbook -i hosts 1-cluster-preparation.yml```
+**Pre-requis**
+- Money to throw out your window
+- Time to waste
+- Ansible installed (on Mac it's `brew install ansible`)
+  - If you have an error with permission blablabla, run:
+    - `sudo mkdir /usr/local/Frameworks`
+    - `sudo chown $(whoami):admin /usr/local/Frameworks`
+    - Rerun brew
+- All node have the latest Rapbian installed
+- They have a static IP
+- You have injected your own ssh keys
+
+**Basic usage:**
+- Clone the repo.
+- By default, the repo/playbook assume that:
+  - Nodes have a fixed ip as `192.168.0.XXX`
+    - Master: `192.168.0.150`
+    - Workers: `192.168.0.151 to 166`
+- Edit the hosts files at `ansible/hosts` if that's not the case
+- You private SSH keys is already in each node
+- Go to `hexadeca/ansible`
+- Run `ansible-playbook -i hosts 1-cluster-preparation.yml`
+
+It will update/upgrade `Raspbian`, install a bunch of basic stuff, put `Docker` and `Kubeadm`.
 
 **BOM**
+
 
 |Item|Quantity|
 |---|---|
