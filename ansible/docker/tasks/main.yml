@@ -1,0 +1,34 @@
+---
+- name: Pulling docker install script
+  get_url:
+    url: https://get.docker.com
+    dest: /home/pi/install_docker.sh
+    mode: 0755
+
+- name: Installing docker
+  shell: sh /home/pi/install_docker.sh
+
+- name: Modify docker privilege
+  become: yes
+  shell: usermod -aG docker $USER
+
+#- name: Adding docker group
+#  shell: newgrp docker
+
+- name: Remove swap
+  become: yes
+  shell: dphys-swapfile swapoff
+
+- name: Delete swap
+  become: yes
+  shell: dphys-swapfile uninstall
+
+- name: Update.rc
+  become: yes
+  shell: update-rc.d dphys-swapfile remove
+
+- name: Update cmdline to disable swap permanently
+  become: yes
+  lineinfile:
+    path: /boot/cmdline.txt
+    line: cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory

@@ -4,10 +4,17 @@ Kubernetes cluster using 16 Raspberry Pi 3B+ plus one as master.
 End goal is to drive wife nuts with idiot project.
 
 **Specs**
+
 - 64 cores (22.4Ghz combined)
 - 1TB of total storage (each node are equipped with a 64GB uSD)
 
-**BOM bare minimum**
+Usage:
+```git clone git@github.com:m600x/hexadeca.git
+cd hexadeca/ansible
+ansible-playbook -i hosts 1-cluster-preparation.yml```
+
+**BOM**
+
 |Item|Quantity|
 |---|---|
 |Raspberry Pi 3 B+|17

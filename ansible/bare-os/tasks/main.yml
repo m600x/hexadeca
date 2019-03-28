@@ -1,0 +1,88 @@
+---
+- name: SSH Keys injection
+  authorized_key:
+    user: pi
+    state: present
+    key: "{{ lookup('file', 'ssh_keys') }}"
+- name: Update repositories cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+
+- name: Update all packages to the latest version
+  become: yes
+  become_method: sudo
+  apt:
+    upgrade: dist
+
+- name: Install basic package
+  become: yes
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - tree
+      - git
+      - curl
+      - wget
+      - vim
+      - zsh
+      - python-pip
+      - python3-pip
+      - python-imaging
+      - python3-smbus
+      - samba
+      - samba-common-bin
+      - avahi-daemon
+      - libavahi-client-dev
+
+- name: Generating locales
+  become: yes
+  shell: locale-gen en_US.UTF-8 ; update-locale en_US.UTF-8 ; perl -pi -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8/g' /etc/locale.gen
+
+- name: Backing up existing ~/.zshrc
+  shell: cp ~/.zshrc ~/.zshrc.origin
+
+- name: Cloning OMZ
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh
+    dest: ~/.oh-my-zsh
+    clone: yes
+    force: yes
+
+- name: Creating new ~/.zshrc
+  copy:
+    src: zshrc
+    dest: ~/.zshrc
+
+- name: Cloning Spaceship theme
+  git:
+    repo: https://github.com/denysdovhan/spaceship-prompt.git
+    dest: ~/.oh-my-zsh/themes/spaceship-prompt
+    clone: yes
+    force: yes
+
+- name: Symlink theme
+  file:
+    src: ~/.oh-my-zsh/themes/spaceship-prompt/spaceship.zsh-theme
+    dest: ~/.oh-my-zsh/themes/spaceship.zsh-theme
+    owner: pi
+    group: pi
+    state: link
+
+- name: Enabling I2C
+  become: yes
+  shell: echo "dtparam=spi=on" | tee /boot/config.txt -a
+
+- name: Enabling SPI
+  become: yes
+  shell: echo ""dtparam=i2c_arm=on" | tee /boot/config.txt -a
+
+- name: Disabling red LED
+  become: yes
+  shell: echo ""dtparam=led_trigger=none" | tee /boot/config.txt -a ; echo ""dtparam=led_activelow=off" | tee /boot/config.txt -a
+
+- name: Cleaning MOTD
+  become: yes
+  shell: rm /etc/motd ; touch /etc/motd

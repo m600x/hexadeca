@@ -1,0 +1,25 @@
+---
+- name: Add Kubernetes to sources apt
+  become: yes
+  shell: echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+
+- name: Gather gpg key file
+  get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: ~/apt-key.gpg
+    mode: 0755
+
+- name: Inject key file
+  become: yes
+  shell: apt-key add ~/apt-key.gpg
+
+- name: Update repositories cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+
+- name: Install Kubeadm
+  become: yes
+  apt:
+    name: kubeadm
