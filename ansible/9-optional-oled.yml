@@ -1,0 +1,37 @@
+---
+- hosts: workers
+  remote_user: pi
+
+  tasks:
+  - name: Install python essentials
+    become: yes
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - pip
+      - build-essential
+      - python-dev
+      - python-pip
+      - python-imaging
+      - python-smbus
+  - pip:
+      name: RPi.GPIO
+  - name: Cloning Adafruit SSD1306 library
+    git:
+      repo: https://github.com/adafruit/Adafruit_Python_SSD1306.git
+      dest: ~/oled
+      clone: yes
+      force: yes
+  - name: Execute installation script
+    become: yes
+    command: python /home/pi/oled/setup.py install
+  - name: Deleting SSD1306 folder
+    file:
+      state: absent
+      path: ~/oled
+  - name: Adding python script for OLED
+    copy:
+      src: ./resources/oled.py
+      dest: ~/oled.py
+      force: yes

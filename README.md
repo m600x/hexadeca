@@ -4,6 +4,8 @@ Kubernetes cluster using 16 Raspberry Pi 3B+ plus one as master. Trying to make 
 
 End goal is to drive wife nuts with idiot project.
 
+** WORK IN PROGRESS, UNUSABLE STATE**
+
 **Specs**
 
 - 64 cores (22.4Ghz combined)

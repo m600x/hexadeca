@@ -4,6 +4,7 @@
     user: pi
     state: present
     key: "{{ lookup('file', 'ssh_keys') }}"
+
 - name: Update repositories cache
   become: yes
   become_method: sudo
@@ -56,20 +57,9 @@
     src: zshrc
     dest: ~/.zshrc
 
-- name: Cloning Spaceship theme
-  git:
-    repo: https://github.com/denysdovhan/spaceship-prompt.git
-    dest: ~/.oh-my-zsh/themes/spaceship-prompt
-    clone: yes
-    force: yes
-
-- name: Symlink theme
-  file:
-    src: ~/.oh-my-zsh/themes/spaceship-prompt/spaceship.zsh-theme
-    dest: ~/.oh-my-zsh/themes/spaceship.zsh-theme
-    owner: pi
-    group: pi
-    state: link
+- name: Set zsh as default shell
+  become: yes
+  shell: chsh -s /bin/zsh
 
 - name: Enabling I2C
   become: yes

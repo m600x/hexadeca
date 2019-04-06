@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-test-node
+spec:
+  selector:
+    app: nginx-test-node
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: nginx-test-node
+spec:
+  selector:
+    matchLabels:
+      app: nginx-test-node
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: nginx-test-node
+    spec:
+      containers:
+      - name: nginx-test-node-container
+        image: m600/nginx-cluster-test-arm64:v1
+        ports:
+        - name: http
+          containerPort: 3000
