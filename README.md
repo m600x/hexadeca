@@ -4,7 +4,11 @@ Kubernetes cluster using 16 Raspberry Pi 3B+ plus one as master. Trying to make 
 
 End goal is to drive wife nuts with idiot project.
 
-** WORK IN PROGRESS, UNUSABLE STATE**
+**/ ! \ WORK IN PROGRESS, UNUSABLE STATE**
+
+![pic1](https://raw.githubusercontent.com/m600x/hexadeca/master/pictures/pic1.jpg)
+
+![pic2](https://raw.githubusercontent.com/m600x/hexadeca/master/pictures/pic2.jpg)
 
 **Specs**
 
